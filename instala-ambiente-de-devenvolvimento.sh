@@ -3,15 +3,6 @@
 URL_GOOGLE_CHROME="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 DIRETORIO_DOWNLOADS="$HOME/downloads/programas"
 
-# instala_dotnet() {
-#     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
-#     sudo dpkg -i packages-microsoft-prod.deb
-#     rm packages-microsoft-prod.deb
-#     sudo apt update
-#     sudo apt install -y apt-transport-https
-#     sudo apt install -y dotnet-sdk-6.0 dotnet-sdk-3.1
-# }
-
 instala_pkg_via_wget() {
     if [ ! -d $DIRETORIO_DOWNLOADS ]; then
         sudo mkdir $HOME/downloads | sudo mkdir $DIRETORIO_DOWNLOADS
@@ -25,9 +16,6 @@ instala_pkg_via_wget() {
 instala_git() {
     sudo apt update
     sudo apt install -y git
-
-    git config --global user.name "Matheus Silva" 
-    git config --global user.email "matheus.silva@ferreiracosta.com"
 }
 
 instala_docker() {
