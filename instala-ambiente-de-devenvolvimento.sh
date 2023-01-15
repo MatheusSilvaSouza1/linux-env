@@ -4,13 +4,8 @@ URL_GOOGLE_CHROME="https://dl.google.com/linux/direct/google-chrome-stable_curre
 DIRETORIO_DOWNLOADS="$HOME/downloads/programas"
 
 instala_pkg_via_wget() {
-    if [ ! -d $DIRETORIO_DOWNLOADS ]; then
-        sudo mkdir $HOME/downloads | sudo mkdir $DIRETORIO_DOWNLOADS
-    fi
-
     wget -c "$URL_GOOGLE_CHROME" -P "$DIRETORIO_DOWNLOADS"
     sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
-    sudo rm -r $DIRETORIO_DOWNLOADS
 }
 
 instala_git() {
@@ -40,6 +35,24 @@ instala_zsh() {
     sudo apt install -y zsh
     sudo chsh -s $(which zsh)
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+    wget -c https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip -P "$DIRETORIO_DOWNLOADS"
+    mkdir $DIRETORIO_DOWNLOADS/fire_code
+    unzip $DIRETORIO_DOWNLOADS/Fira_Code_v6.2.zip -d $DIRETORIO_DOWNLOADS/fire_code
+
+    if [ ! -d $HOME/.local/share/fonts ]; then
+        mkdir $HOME/.local
+        mkdir $HOME/.local/share
+        mkdir $HOME/.local/share/fonts
+    fi
+
+    cp $DIRETORIO_DOWNLOADS/fire_code/ttf/*.ttf $HOME/.local/share/fonts
+    rm -r $DIRETORIO_DOWNLOADS/fire_code $DIRETORIO_DOWNLOADS/Fira_Code_v6.2.zip
+
+    git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+    ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+
+    sed 's/ZSH_THEME="robbyrussell"/ZSH_THEME="spaceship"/g' $HOME/.zshrc
 }
 
 # Gerencie várias versões de runtime com uma única ferramenta CLI
@@ -73,11 +86,15 @@ main() {
     sudo apt install -y wget curl snapd unzip
     sudo apt --fix-broken install
 
+    if [ ! -d $DIRETORIO_DOWNLOADS ]; then
+        sudo mkdir $HOME/downloads | sudo mkdir $DIRETORIO_DOWNLOADS
+    fi
+
     instala_git
     instala_asdf
     instala_docker
 
-    instala_zsh
+    # instala_zsh
 
     ### para ambiente grafico
     # instala_pkg_via_wget
